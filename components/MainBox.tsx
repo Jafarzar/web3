@@ -4,29 +4,52 @@ import {
   Center,
   HStack,
   Heading,
+  Icon,
   Modal,
   ModalBody,
   ModalContent,
   ModalHeader,
   ModalOverlay,
   Stack,
+  Text,
   VStack,
   useDisclosure,
 } from "@chakra-ui/react";
 import Image from "next/image";
 import React from "react";
+import { TfiWallet } from "react-icons/tfi";
+
+import { useConnect } from "wagmi";
 
 type Props = {};
 
 const MainBox = (props: Props) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
 
+  const { connect, connectors, error, isLoading, pendingConnector } =
+    useConnect();
+  console.log(connectors);
   return (
-    <VStack h="100vh" justify="center">
+    <VStack h="100vh" justify="center" textColor="yellow.400">
       <Center bg="yellow.700" w={600} h={300}>
-        <Stack spacing={4}>
-          <Heading>Welcome!</Heading>
-          <Button onClick={onOpen}>Connect your wallet</Button>
+        <Stack direction="row" spacing={2} justify="center" align="center">
+          <VStack spacing={4} p={6}>
+            <Center w={140} h={100} bg="yellow.400" textColor="yellow.700">
+              <Icon as={TfiWallet} boxSize={14} />
+            </Center>
+            <Button
+              onClick={onOpen}
+              colorScheme="yellow"
+              textColor="yellow.900"
+              fontWeight="bold"
+              borderRadius={0}
+            >
+              Connect your wallet
+            </Button>
+          </VStack>
+          <Center w={300}>
+            <Heading>Welcome!</Heading>
+          </Center>
         </Stack>
       </Center>
 
@@ -64,6 +87,8 @@ const MainBox = (props: Props) => {
                 py={8}
                 bg="transparent"
                 borderRadius={0}
+                disabled={!connectors[0].ready}
+                key={connectors[0].id}
                 _hover={{ bg: "#4d2c0c" }}
               >
                 <Box position="relative" w={34} h={34}>
@@ -78,6 +103,7 @@ const MainBox = (props: Props) => {
                 py={8}
                 bg="transparent"
                 borderRadius={0}
+                key={connectors[1].id}
                 _hover={{ bg: "#4d2c0c" }}
               >
                 <Box position="relative" w={34} h={34}>
