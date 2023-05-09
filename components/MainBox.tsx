@@ -15,15 +15,16 @@ import {
   Text,
   VStack,
   useDisclosure,
-  useToast,
 } from "@chakra-ui/react";
 import Image from "next/image";
 import React from "react";
 import { TfiWallet } from "react-icons/tfi";
 import { MdLogout } from "react-icons/md";
+import { motion } from "framer-motion";
 
 import {
   useAccount,
+  useBalance,
   useConnect,
   useDisconnect,
   useEnsAvatar,
@@ -35,24 +36,40 @@ type Props = {};
 const MainBox = (props: Props) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
 
-  const { address, connector, isConnected } = useAccount();
-  const { data: ensAvatar } = useEnsAvatar({ address });
-  const { data: ensName } = useEnsName({ address });
-  const { connect, connectors, error, isLoading, pendingConnector } =
-    useConnect();
+  const account = useAccount({
+    onConnect({ address, connector, isReconnected }) {
+      console.log("Connected", { address, connector, isReconnected });
+    },
+  });
+  const { data: ensAvatar } = useEnsAvatar({
+    address: account.address,
+  });
+  const { data: ensName } = useEnsName({
+    address: account.address,
+  });
+  const { data } = useBalance({
+    address: account.address,
+    onSuccess(data) {
+      console.log("Success", data);
+    },
+  });
+  const { connect, connectors, error, isLoading } = useConnect();
   const { disconnect } = useDisconnect();
 
-  const toast = useToast();
-
   const truncatedAddress =
-    address?.slice(0, 5) +
+    account.address?.slice(0, 5) +
     "..." +
-    address?.slice(address?.length - 5, address?.length);
+    account.address?.slice(
+      account.address?.length - 5,
+      account.address?.length
+    );
 
-  if (isConnected) {
-    console.log(ensName, ensAvatar, address);
+  if (account.address) {
+    console.log("test22222", ensName, ensAvatar, account.address);
+    console.log("test balance", data);
+
     return (
-      <VStack h="100vh" justify="center">
+      <VStack h="100vh" justify="center" textColor="yellow.400">
         <Center bg="yellow.700" w={600} h={300} position="relative">
           <Stack direction="row" spacing={2} justify="center" align="center">
             <VStack spacing={4} p={6}>
@@ -75,9 +92,28 @@ const MainBox = (props: Props) => {
                   ? `${ensName} (${truncatedAddress})`
                   : truncatedAddress}
               </Text>
+              <Text
+                bg="yellow.400"
+                textColor="yellow.700"
+                fontWeight="bold"
+                py={2}
+                px={4}
+              >
+                {data?.formatted} {data?.symbol}
+              </Text>
             </VStack>
           </Stack>
-
+          <motion.div
+            initial={{ width: 0 }}
+            animate={{ width: "300px" }}
+            transition={{ duration: 0.5 }}
+          >
+            <Center>
+              <Heading textAlign="center">
+                Connected to {account.connector?.name}
+              </Heading>
+            </Center>
+          </motion.div>
           <Button
             colorScheme="red"
             p={0}
@@ -122,19 +158,7 @@ const MainBox = (props: Props) => {
             >
               Connect your wallet
             </Button>
-
-            {error &&
-              toast({
-                description: error?.message,
-                duration: 1000,
-                status: "error",
-              })}
           </VStack>
-          {isLoading && (
-            <Center w={300}>
-              <Heading>Welcome!</Heading>
-            </Center>
-          )}
         </Stack>
       </Center>
 
