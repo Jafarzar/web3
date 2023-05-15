@@ -2,39 +2,36 @@ import type { AppProps } from "next/app";
 import { ChakraProvider } from "@chakra-ui/react";
 import { extendTheme } from "@chakra-ui/react";
 
-import { WagmiConfig, createClient, configureChains, goerli } from "wagmi";
-
-import { infuraProvider } from "wagmi/providers/infura";
+import { WagmiConfig, configureChains, createConfig } from "wagmi";
+import { publicProvider } from "wagmi/providers/public";
 
 import { MetaMaskConnector } from "wagmi/connectors/metaMask";
 import { WalletConnectConnector } from "wagmi/connectors/walletConnect";
+import { goerli } from "wagmi/chains";
 
 // Configure chains & providers with the Alchemy provider.
 // Two popular providers are Alchemy (alchemy.com) and Infura (infura.io)
-const { chains, provider, webSocketProvider } = configureChains(
+const { chains, publicClient, webSocketPublicClient } = configureChains(
   [goerli],
-  [
-    infuraProvider({
-      apiKey: "https://goerli.infura.io/v3/e1633d05aa634a9cb8d25688dc196506",
-    }),
-  ]
+  [publicProvider()]
 );
 
 // Set up client
-const client = createClient({
+const config = createConfig({
   autoConnect: false,
   connectors: [
     new MetaMaskConnector({ chains }),
 
-    new WalletConnectConnector({
-      chains,
-      options: {
-        projectId: "...",
-      },
-    }),
+    // new WalletConnectConnector({
+    //   chains,
+    //   options: {
+    //     projectId: "6df05069cdc853726e882f83e11e70f0",
+    //     showQrModal: true,
+    //   },
+    // }),
   ],
-  provider,
-  webSocketProvider,
+  publicClient,
+  webSocketPublicClient,
 });
 
 const theme = extendTheme({
@@ -53,7 +50,7 @@ const theme = extendTheme({
 
 export default function App({ Component, pageProps }: AppProps) {
   return (
-    <WagmiConfig client={client}>
+    <WagmiConfig config={config}>
       <ChakraProvider theme={theme}>
         <Component {...pageProps} />
       </ChakraProvider>
