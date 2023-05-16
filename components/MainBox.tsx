@@ -31,6 +31,7 @@ import {
   useEnsAvatar,
   useEnsName,
 } from "wagmi";
+import MintNFT from "./MintNFT";
 
 type Props = {};
 
@@ -68,8 +69,8 @@ const MainBox = (props: Props) => {
       <VStack h="100vh" justify="center" textColor="yellow.400">
         <Center bg="yellow.700" w={600} h={300} position="relative">
           <Stack direction="row" spacing={2} justify="center" align="center">
-            <VStack spacing={4} p={6}>
-              <Center w={140} h={100} bg="yellow.400" textColor="yellow.700">
+            <VStack spacing={2} p={6}>
+              <Center w={160} h={100} bg="yellow.400" textColor="yellow.700">
                 <Avatar
                   size="lg"
                   src={ensAvatar ? ensAvatar : ""}
@@ -77,26 +78,24 @@ const MainBox = (props: Props) => {
                 />
               </Center>
 
-              <Text
+              <Center
+                flexDirection="column"
+                w={160}
                 bg="yellow.400"
                 textColor="yellow.700"
                 fontWeight="bold"
                 py={2}
                 px={4}
               >
-                {ensName
-                  ? `${ensName} (${truncatedAddress})`
-                  : truncatedAddress}
-              </Text>
-              <Text
-                bg="yellow.400"
-                textColor="yellow.700"
-                fontWeight="bold"
-                py={2}
-                px={4}
-              >
-                {data?.formatted} {data?.symbol}
-              </Text>
+                <Text>
+                  {ensName
+                    ? `${ensName} (${truncatedAddress})`
+                    : truncatedAddress}
+                </Text>
+                <Text fontSize="xs">
+                  {data?.formatted} {data?.symbol}
+                </Text>
+              </Center>
             </VStack>
           </Stack>
           <motion.div
@@ -104,10 +103,11 @@ const MainBox = (props: Props) => {
             animate={{ width: "300px" }}
             transition={{ duration: 0.5 }}
           >
-            <Center>
+            <Center flexDirection="column">
               <Heading textAlign="center">
                 Connected to {connector?.name}
               </Heading>
+              <MintNFT />
             </Center>
           </motion.div>
           <IconButton
