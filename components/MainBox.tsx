@@ -60,6 +60,8 @@ const MainBox = (props: Props) => {
     "..." +
     address?.slice(address?.length - 5, address?.length);
 
+  const truncatedBalance = data?.formatted.slice(0, 7);
+
   const isMounted = typeof window !== "undefined";
 
   if (isMounted && isConnected) {
@@ -70,12 +72,24 @@ const MainBox = (props: Props) => {
         <Center bg="yellow.700" w={600} h={300} position="relative">
           <Stack direction="row" spacing={2} justify="center" align="center">
             <VStack spacing={2} p={6}>
-              <Center w={160} h={100} bg="yellow.400" textColor="yellow.700">
+              <Center
+                w={160}
+                py={4}
+                bg="yellow.400"
+                textColor="yellow.700"
+                flexDirection="column"
+                gap={2}
+              >
                 <Avatar
                   size="lg"
                   src={ensAvatar ? ensAvatar : ""}
                   bg="yellow.700"
                 />
+                <Text fontFamily="sans-serif" fontWeight="bold">
+                  {ensName
+                    ? `${ensName} (${truncatedAddress})`
+                    : truncatedAddress}
+                </Text>
               </Center>
 
               <Center
@@ -86,14 +100,10 @@ const MainBox = (props: Props) => {
                 fontWeight="bold"
                 py={2}
                 px={4}
+                fontFamily="sans-serif"
               >
-                <Text>
-                  {ensName
-                    ? `${ensName} (${truncatedAddress})`
-                    : truncatedAddress}
-                </Text>
                 <Text fontSize="xs">
-                  {data?.formatted} {data?.symbol}
+                  {truncatedBalance} {data?.symbol}
                 </Text>
               </Center>
             </VStack>
@@ -103,10 +113,8 @@ const MainBox = (props: Props) => {
             animate={{ width: "300px" }}
             transition={{ duration: 0.5 }}
           >
-            <Center flexDirection="column">
-              <Heading textAlign="center">
-                Connected to {connector?.name}
-              </Heading>
+            <Center flexDirection="column" gap={2}>
+              <Text textAlign="center">Connected to {connector?.name}</Text>
               <MintNFT />
             </Center>
           </motion.div>
