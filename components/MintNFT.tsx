@@ -26,7 +26,7 @@ const MintNFT = () => {
     args: [BigInt(1)],
     chainId: goerli.id,
   });
-  const { data, write } = useContractWrite(config);
+  const { data, write, status } = useContractWrite(config);
 
   const { isLoading, isSuccess } = useWaitForTransaction({
     hash: data?.hash,
@@ -36,7 +36,7 @@ const MintNFT = () => {
   return (
     <Center h={125} flexDirection="column" gap={2}>
       <Button
-        disabled={!write || isLoading}
+        disabled={!write || isLoading || status === "loading"}
         onClick={() => write?.()}
         h="min-content"
         px={3}
@@ -48,7 +48,12 @@ const MintNFT = () => {
         borderColor="yellow.800"
         _hover={{ bg: "yellow.200" }}
       >
-        {isLoading ? "Minting..." : "Mint NFT"}
+        {(status === "idle" ||
+          status === "error" ||
+          (status === "success" && !isLoading)) &&
+          "Mint NFT"}
+        {status === "loading" && "On approval"}
+        {isLoading && "Minting..."}
       </Button>
 
       {isSuccess && (
