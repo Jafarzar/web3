@@ -8,6 +8,7 @@ import { publicProvider } from "wagmi/providers/public";
 import { MetaMaskConnector } from "wagmi/connectors/metaMask";
 import { WalletConnectConnector } from "wagmi/connectors/walletConnect";
 import { goerli } from "wagmi/chains";
+import { ClientOnly } from "@/components/Mount";
 
 // Configure chains & providers with the Alchemy provider.
 // Two popular providers are Alchemy (alchemy.com) and Infura (infura.io)
@@ -18,7 +19,7 @@ const { chains, publicClient, webSocketPublicClient } = configureChains(
 
 // Set up client
 const config = createConfig({
-  autoConnect: false,
+  autoConnect: true,
   connectors: [
     new MetaMaskConnector({ chains }),
 
@@ -47,12 +48,13 @@ const theme = extendTheme({
     body: `'Darumadrop One', cursive`,
   },
 });
-
 export default function App({ Component, pageProps }: AppProps) {
   return (
     <WagmiConfig config={config}>
       <ChakraProvider theme={theme}>
-        <Component {...pageProps} />
+        <ClientOnly>
+          <Component {...pageProps} />
+        </ClientOnly>
       </ChakraProvider>
     </WagmiConfig>
   );

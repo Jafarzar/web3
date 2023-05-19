@@ -24,6 +24,7 @@ import { MdLogout } from "react-icons/md";
 import { motion } from "framer-motion";
 
 import {
+  Address,
   useAccount,
   useBalance,
   useConnect,
@@ -33,26 +34,19 @@ import {
 } from "wagmi";
 import MintNFT from "./MintNFT";
 
-type Props = {};
-
-const MainBox = (props: Props) => {
+const MainBox = () => {
   const { isOpen, onOpen, onClose } = useDisclosure();
 
   const { isConnected, address, connector } = useAccount({
-    onConnect({ address, connector, isReconnected }) {
-      console.log("Connected", { address, connector, isReconnected });
-    },
+    onConnect({ address, connector, isReconnected }) {},
   });
   const { data: ensName } = useEnsName({ address });
   const { data: ensAvatar } = useEnsAvatar({ name: ensName });
   const { data } = useBalance({
     address,
-    // token: "0xCF5193b77e2872E71B9F9cFA9014C2F1D81D6473",
-    onSuccess(data) {
-      console.log("Success", data);
-    },
+    watch: true,
   });
-  const { connect, connectors, error, isLoading } = useConnect();
+  const { connect, connectors, isLoading } = useConnect();
   const { disconnect } = useDisconnect();
 
   const truncatedAddress =
@@ -62,11 +56,7 @@ const MainBox = (props: Props) => {
 
   const truncatedBalance = data?.formatted.slice(0, 7);
 
-  const isMounted = typeof window !== "undefined";
-
-  if (isMounted && isConnected) {
-    console.log("test22222", ensName, ensAvatar, address);
-    console.log("test balance", data);
+  if (isConnected) {
     return (
       <VStack h="100vh" justify="center" textColor="yellow.400">
         <Center bg="yellow.700" w={600} h={300} position="relative">
@@ -141,7 +131,7 @@ const MainBox = (props: Props) => {
         <Stack direction="row" spacing={2} justify="center" align="center">
           <VStack spacing={4} p={6}>
             <Center w={140} h={100} bg="yellow.400" textColor="yellow.700">
-              {isMounted && isLoading ? (
+              {isLoading ? (
                 <Spinner
                   size="lg"
                   thickness="4px"
@@ -195,49 +185,48 @@ const MainBox = (props: Props) => {
 
           <ModalBody textAlign="center" m={0} p={0}>
             <VStack justify="center" h="full" spacing={0}>
-              {isMounted &&
-                connectors.map((connector) => {
-                  const logo = (() => {
-                    switch (connector.id) {
-                      case "metaMask":
-                        return "/svg/metamask.svg";
+              {connectors.map((connector) => {
+                const logo = (() => {
+                  switch (connector.id) {
+                    case "metaMask":
+                      return "/svg/metamask.svg";
 
-                      case "walletConnect":
-                        return "/svg/wc.svg";
+                    case "walletConnect":
+                      return "/svg/wc.svg";
 
-                      default:
-                        return "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQoqXs2Xz5LL25i7IjJ2-KlGYqaHP1GYVPWMx1M-RsegqiNQ73jf7qzMHNAncvpaY0iCNE&usqp=CAU";
-                    }
-                  })();
+                    default:
+                      return "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQoqXs2Xz5LL25i7IjJ2-KlGYqaHP1GYVPWMx1M-RsegqiNQ73jf7qzMHNAncvpaY0iCNE&usqp=CAU";
+                  }
+                })();
 
-                  const connectHandler = () => {
-                    connect({ connector });
-                    onClose();
-                  };
+                const connectHandler = () => {
+                  connect({ connector });
+                  onClose();
+                };
 
-                  return (
-                    <Button
-                      w="full"
-                      h="min-content"
-                      py={4}
-                      bg="transparent"
-                      borderRadius={0}
-                      disabled={!connector.ready}
-                      key={connector.id}
-                      onClick={connectHandler}
-                      _hover={{ bg: "#4d2c0c" }}
-                      alignContent="center"
-                    >
-                      <Box position="relative" w={34} h={34}>
-                        <Image src={logo} alt={connector.id} fill />
-                      </Box>
-                      <Heading size="lg" ml={4}>
-                        {connector.name}
-                      </Heading>
-                      {!connector.ready && <Text>(unsupported)</Text>}
-                    </Button>
-                  );
-                })}
+                return (
+                  <Button
+                    w="full"
+                    h="min-content"
+                    py={4}
+                    bg="transparent"
+                    borderRadius={0}
+                    disabled={!connector.ready}
+                    key={connector.id}
+                    onClick={connectHandler}
+                    _hover={{ bg: "#4d2c0c" }}
+                    alignContent="center"
+                  >
+                    <Box position="relative" w={34} h={34}>
+                      <Image src={logo} alt={connector.id} fill />
+                    </Box>
+                    <Heading size="lg" ml={4}>
+                      {connector.name}
+                    </Heading>
+                    {!connector.ready && <Text>(unsupported)</Text>}
+                  </Button>
+                );
+              })}
             </VStack>
           </ModalBody>
         </ModalContent>

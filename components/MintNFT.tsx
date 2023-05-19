@@ -14,11 +14,25 @@ import {
   usePrepareContractWrite,
   useContractWrite,
   useWaitForTransaction,
+  Address,
+  useContractRead,
+  useAccount,
 } from "wagmi";
-import { ABI } from "../abi";
+import { ABI } from "@/abi";
 import { goerli } from "viem/chains";
+import MintBalance from "./MintBalance";
 
 const MintNFT = () => {
+  const { address } = useAccount();
+
+  const { refetch } = useContractRead({
+    address: "0x3f228cBceC3aD130c45D21664f2C7f5b23130d23",
+    abi: ABI,
+    functionName: "balanceOf",
+    args: [address!],
+    chainId: goerli.id,
+  });
+
   const { config } = usePrepareContractWrite({
     address: "0x3f228cBceC3aD130c45D21664f2C7f5b23130d23",
     abi: ABI,
@@ -31,6 +45,7 @@ const MintNFT = () => {
   const { isLoading, isSuccess } = useWaitForTransaction({
     hash: data?.hash,
     chainId: goerli.id,
+    onSuccess: () => refetch(),
   });
 
   return (
@@ -56,20 +71,20 @@ const MintNFT = () => {
         {isLoading && "Minting..."}
       </Button>
 
-      {isSuccess && (
-        <Grid
-          templateColumns="repeat(2, 1fr)"
-          gap={2}
-          fontSize="sm"
-          fontWeight="bold"
+      <Grid
+        templateColumns="repeat(2, 1fr)"
+        gap={2}
+        fontSize="sm"
+        fontWeight="bold"
+      >
+        <GridItem
+          bg="yellow.400"
+          color="yellow.700"
+          px={4}
+          py={2}
+          borderRadius={8}
         >
-          <GridItem
-            bg="yellow.400"
-            color="yellow.700"
-            px={4}
-            py={2}
-            borderRadius={8}
-          >
+          {isSuccess ? (
             <Stack direction="column" textAlign="left" spacing={0}>
               <Text>Successfully minted!</Text>
               <Text lineHeight="shorter">
@@ -87,21 +102,20 @@ const MintNFT = () => {
                 </Link>
               </Text>
             </Stack>
-          </GridItem>
-          <GridItem
-            bg="yellow.400"
-            color="yellow.700"
-            px={4}
-            py={2}
-            borderRadius={8}
-          >
-            <Stack direction="column" justify="center" textAlign="center">
-              <Text fontSize="xs">you have minted:</Text>
-              <Text>2 times</Text>
-            </Stack>
-          </GridItem>
-        </Grid>
-      )}
+          ) : (
+            <Center h="full">Welcome!</Center>
+          )}
+        </GridItem>
+        <GridItem
+          bg="yellow.400"
+          color="yellow.700"
+          px={4}
+          py={2}
+          borderRadius={8}
+        >
+          <MintBalance />
+        </GridItem>
+      </Grid>
     </Center>
   );
 };
