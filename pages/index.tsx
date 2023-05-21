@@ -1,3 +1,4 @@
+import Background from "@/components/Background";
 import MainBox from "@/components/MainBox";
 import { Container } from "@chakra-ui/react";
 import Head from "next/head";
@@ -11,7 +12,14 @@ export default function Home() {
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <Container maxW={1440} w="full" h="100vh">
+      <Container
+        maxW={1920}
+        w="full"
+        h="100vh"
+        position="relative"
+        overflowX="hidden"
+      >
+        {/* <Background /> */}
         <MainBox />
       </Container>
     </>

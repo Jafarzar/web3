@@ -49,28 +49,7 @@ const MintNFT = () => {
   });
 
   return (
-    <Center h={125} flexDirection="column" gap={2}>
-      <Button
-        disabled={!write || isLoading || status === "loading"}
-        onClick={() => write?.()}
-        h="min-content"
-        px={3}
-        py={1}
-        borderRadius={999}
-        bg="yellow.400"
-        textColor="yellow.700"
-        border="2px"
-        borderColor="yellow.800"
-        _hover={{ bg: "yellow.200" }}
-      >
-        {(status === "idle" ||
-          status === "error" ||
-          (status === "success" && !isLoading)) &&
-          "Mint NFT"}
-        {status === "loading" && "On approval"}
-        {isLoading && "Minting..."}
-      </Button>
-
+    <Center h={125} flexDirection="column" gap={4}>
       <Grid
         templateColumns="repeat(2, 1fr)"
         gap={2}
@@ -116,6 +95,27 @@ const MintNFT = () => {
           <MintBalance />
         </GridItem>
       </Grid>
+
+      <Button
+        disabled={!write || isLoading || status === "loading"}
+        onClick={() => write?.()}
+        h="min-content"
+        px={3}
+        py={1}
+        borderRadius={999}
+        bg="yellow.400"
+        textColor="yellow.700"
+        border="2px"
+        borderColor="yellow.800"
+        _hover={{ bg: "yellow.200" }}
+      >
+        {(status === "idle" ||
+          status === "error" ||
+          (status === "success" && !isLoading)) &&
+          "Mint NFT"}
+        {status === "loading" && "On approval"}
+        {isLoading && "Minting..."}
+      </Button>
     </Center>
   );
 };

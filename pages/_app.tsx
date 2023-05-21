@@ -1,6 +1,9 @@
 import type { AppProps } from "next/app";
 import { ChakraProvider } from "@chakra-ui/react";
 import { extendTheme } from "@chakra-ui/react";
+import "@fontsource/pacifico";
+import "@fontsource/inter";
+import "@fontsource/inconsolata";
 
 import { WagmiConfig, configureChains, createConfig } from "wagmi";
 import { publicProvider } from "wagmi/providers/public";
@@ -44,8 +47,8 @@ const theme = extendTheme({
     }),
   },
   fonts: {
-    heading: `'Darumadrop One', cursive`,
-    body: `'Darumadrop One', cursive`,
+    body: "Inconsolata",
+    heading: "Inconsolata",
   },
 });
 export default function App({ Component, pageProps }: AppProps) {

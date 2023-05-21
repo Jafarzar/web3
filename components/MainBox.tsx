@@ -75,7 +75,7 @@ const MainBox = () => {
                   src={ensAvatar ? ensAvatar : ""}
                   bg="yellow.700"
                 />
-                <Text fontFamily="sans-serif" fontWeight="bold">
+                <Text fontWeight="bold">
                   {ensName
                     ? `${ensName} (${truncatedAddress})`
                     : truncatedAddress}
@@ -90,7 +90,6 @@ const MainBox = () => {
                 fontWeight="bold"
                 py={2}
                 px={4}
-                fontFamily="sans-serif"
               >
                 <Text fontSize="xs">
                   {truncatedBalance} {data?.symbol}
@@ -150,7 +149,7 @@ const MainBox = () => {
               fontWeight="bold"
               borderRadius={0}
             >
-              Connect your wallet
+              Connect your wallet(testnet)
             </Button>
           </VStack>
         </Stack>
