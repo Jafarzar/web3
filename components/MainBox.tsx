@@ -59,7 +59,13 @@ const MainBox = () => {
   if (isConnected) {
     return (
       <VStack h="100vh" justify="center" textColor="yellow.400">
-        <Center bg="yellow.700" w={600} h={300} position="relative">
+        <Center
+          bg="yellow.700"
+          w={600}
+          h={300}
+          position="relative"
+          sx={{ boxShadow: "0 0 500px black" }}
+        >
           <Stack direction="row" spacing={2} justify="center" align="center">
             <VStack spacing={2} p={6}>
               <Center
@@ -126,7 +132,13 @@ const MainBox = () => {
 
   return (
     <VStack h="100vh" justify="center" textColor="yellow.400">
-      <Center bg="yellow.700" w={600} h={300}>
+      <Center
+        bg="yellow.700"
+        w={600}
+        h={300}
+        position="relative"
+        sx={{ boxShadow: "0 0 500px black" }}
+      >
         <Stack direction="row" spacing={2} justify="center" align="center">
           <VStack spacing={4} p={6}>
             <Center w={140} h={100} bg="yellow.400" textColor="yellow.700">
