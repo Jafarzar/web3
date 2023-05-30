@@ -19,7 +19,7 @@ export default function Home() {
         position="relative"
         overflowX="hidden"
       >
-        <Background />
+        {/* <Background /> */}
         <MainBox />
       </Container>
     </>

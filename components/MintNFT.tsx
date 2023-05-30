@@ -22,6 +22,8 @@ import { ABI } from "@/abi";
 import { goerli } from "viem/chains";
 import MintBalance from "./MintBalance";
 
+import { useCustomButton } from "@/function/useCustomButton";
+
 const MintNFT = () => {
   const { address } = useAccount();
 
@@ -46,6 +48,12 @@ const MintNFT = () => {
     hash: data?.hash,
     chainId: goerli.id,
     onSuccess: () => refetch(),
+  });
+
+  const { disabled, buttonText } = useCustomButton({
+    write,
+    status,
+    isLoading,
   });
 
   return (
@@ -109,12 +117,7 @@ const MintNFT = () => {
         borderColor="yellow.800"
         _hover={{ bg: "yellow.200" }}
       >
-        {(status === "idle" ||
-          status === "error" ||
-          (status === "success" && !isLoading)) &&
-          "Mint NFT"}
-        {status === "loading" && "On approval"}
-        {isLoading && "Minting..."}
+        {buttonText}
       </Button>
     </Center>
   );

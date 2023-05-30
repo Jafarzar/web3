@@ -1,7 +1,6 @@
 import { Box, HStack, Text, VStack } from "@chakra-ui/react";
 import Image from "next/image";
 import React from "react";
-import { useSpring, animated } from "react-spring";
 
 type Props = {};
 
@@ -28,40 +27,17 @@ const DUMMY_BG1 = [
   },
 ];
 
-const Background = (props: Props) => {
-  const bgAnimation = useSpring({
-    from: { transform: "translateX(-100%)" },
-    to: { transform: "translateX(100%)" },
-    reset: true,
-    reverse: true,
-    loop: true,
-    config: { duration: 5000 },
-  });
-
+const Background = () => {
   return (
     <VStack position="absolute" w={1920} h="full" left={0} py={2}>
       <HStack h="full" w="full">
-        <animated.div
-          style={{
-            display: "flex",
-            width: `3000px`,
-            height: "260px",
-            transform: bgAnimation.transform,
-          }}
-        >
-          {DUMMY_BG1.map((image) => {
-            return (
-              <Box key={image.id} position="relative" w="full" h="full">
-                <Image
-                  src={image.url}
-                  alt="1"
-                  fill
-                  style={{ borderRadius: 8 }}
-                />
-              </Box>
-            );
-          })}
-        </animated.div>
+        {DUMMY_BG1.map((image) => {
+          return (
+            <Box key={image.id} position="relative" w="full" h="full">
+              <Image src={image.url} alt="1" fill style={{ borderRadius: 8 }} />
+            </Box>
+          );
+        })}
       </HStack>
       <Box bg="blue" h="full" w="full"></Box>
       <Box bg="yellow" h="full" w="full"></Box>
