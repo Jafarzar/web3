@@ -16,7 +16,7 @@ const MintBalance = () => {
   });
 
   return (
-    <Stack direction="column" justify="center" textAlign="center">
+    <Stack direction="column" justify="center" textAlign="center" spacing={0}>
       <Text fontSize="xs">you have minted:</Text>
       <Text>{String(data)} times</Text>
     </Stack>

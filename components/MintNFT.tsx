@@ -1,10 +1,8 @@
 import {
-  Box,
   Button,
   Center,
   Grid,
   GridItem,
-  HStack,
   Link,
   Stack,
   Text,
@@ -14,7 +12,6 @@ import {
   usePrepareContractWrite,
   useContractWrite,
   useWaitForTransaction,
-  Address,
   useContractRead,
   useAccount,
 } from "wagmi";
